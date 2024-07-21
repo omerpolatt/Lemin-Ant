@@ -19,7 +19,6 @@ func main() {
 
 	filename := os.Args[1]
 
-	// Dosyanın içeriğini okuyarak tüm satırları lines değişkenine aktar
 	data, err := os.ReadFile(filename)
 	if err != nil {
 		fmt.Println("Error reading file:", err)
@@ -27,13 +26,13 @@ func main() {
 	}
 	lines := strings.Split(string(data), "\n")
 
-	// MergeProcess fonksiyonunu çağırarak dosya içeriğindeki hataları kontrol et
+	// MergeProcess fonksiyonunu çağırarak dosya içeriğindeki hataları kontrol et ( Check for errors in the file content by calling the MergeProcess function )
 	if errorOutput := errorslemin.Mergeprocess(lines); errorOutput != "" {
 		fmt.Println(errorOutput)
 		return
 	}
 
-	// Dosya içeriği uygunsa, dosya ayrıştırma işlemine devam et
+	// Dosya içeriği uygunsa, dosya ayrıştırma işlemini gerçekleştirir ( Performs file parsing if the file content is appropriate  )
 	result, err := events.ParseInputFile(filename)
 	if err != nil {
 		fmt.Println(err)
