@@ -41,13 +41,15 @@ func ParseInputFile(filename string) (ParseResult, error) {
 	var connections []Connection
 
 	firstLine := true
+
 	for scanner.Scan() {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "##comment") || strings.HasPrefix(line, "#comment") || strings.HasPrefix(line, "#another comment") {
 			continue
 		}
 
-		if firstLine {
+		if firstLine { // burada okuma işlemi içinde ilk satırda karınca sayısını alacağımız için bu şekilde koşul sunduk
+			// ( Since we will get the number of ants on the first line in the read operation, we set the condition in this way )
 			antCount, err = strconv.Atoi(line)
 			if err != nil {
 				return ParseResult{}, fmt.Errorf("ant count not read: %w", err)
@@ -56,7 +58,7 @@ func ParseInputFile(filename string) (ParseResult, error) {
 			continue
 		}
 
-		if strings.Contains(line, "-") {
+		if strings.Contains(line, "-") { //  ' - ' bulunan satılarda bağlantıları belirledik  ('-'  links to the sales found have been identified )
 			parts := strings.Split(line, "-")
 			connections = append(connections, Connection{From: parts[0], To: parts[1]})
 		} else {
@@ -83,7 +85,7 @@ func ParseInputFile(filename string) (ParseResult, error) {
 	}, nil
 }
 
-func ParseRoom(line string) Room {
+func ParseRoom(line string) Room { // Oda isimlerini ve bağlantılarını ayırdığımız fonksiyon ( Function where we separate room names and connections )
 	parts := strings.Fields(line)
 	name := parts[0]
 	var coordinates []int
@@ -94,7 +96,7 @@ func ParseRoom(line string) Room {
 	return Room{Name: name, Coordinates: coordinates}
 }
 
-func BuildGraph(rooms []Room, connections []Connection) map[string]map[string]bool {
+func BuildGraph(rooms []Room, connections []Connection) map[string]map[string]bool { // Graph yapısını oluşturacak fonksiyon ( Function to create the graph structure )
 	graph := make(map[string]map[string]bool)
 	for _, room := range rooms {
 		graph[room.Name] = make(map[string]bool)

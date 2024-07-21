@@ -1,41 +1,32 @@
 package bfs
 
 func Bfs(graph map[string]map[string]bool, start string, end string) [][]string {
-	var allPaths [][]string      // Array to hold all alternative paths
-	queue := [][]string{{start}} // The queue always starts with the starting node
+	var allPaths [][]string // Olası yolların tamamını bulunduran dizi ( Sequence with all possible pathways )
+	queue := [][]string{{start}}
 
-	for len(queue) > 0 { // Continue as long as there are elements in the queue
+	for len(queue) > 0 { // kuyrukta eleman olduğu sürece yol bulmaya devam edeceğiz ( we will continue as long as there are nodes in the queue )
 		path := queue[0]
 		queue = queue[1:]
-		node := path[len(path)-1] // The node to be processed is the last element in the queue
+		node := path[len(path)-1]
 
-		if node == end { // If the node being checked is equal to the end, add the path to allPaths
+		if node == end { // son düğüm end noktasına eşit ise o yolu dizi içine ekleriz  ( if the last node is equal to the end point, we add that path to the array )
 			allPaths = append(allPaths, path)
 			continue
-
-		} else { // If the node being checked is not equal to the end, continue from here
-
-			for neighbor := range graph[node] { // Create a graph with the nodes connected to the last node
-
-				// Check if the neighboring node is already in the path
-				if !isNeighborInPath(neighbor, path) { // If the neighbors are not in the queue
-					// Create a new path by copying the existing path and adding the neighboring node
-					newPath := make([]string, len(path))
-					copy(newPath, path)
-					newPath = append(newPath, neighbor)
-
-					// Add the new path to the queue
-					queue = append(queue, newPath)
-				}
-			}
 		}
 
+		for neighbor := range graph[node] { // son düğüm end noktasına eşit değil ise komşuluk listesinden mevcut düğümün ziyaret edilmemiş her bir komşusuna gidilerek yol seçeneklerini else ederiz
+			if !isNeighborInPath(neighbor, path) { // ( if the last node is not equal to the end point, we go to each unvisited neighbor of the current node from the neighborhood list and choose the path options else )
+				newPath := make([]string, len(path))
+				copy(newPath, path)
+				newPath = append(newPath, neighbor)
+				queue = append(queue, newPath)
+			}
+		}
 	}
-
 	return allPaths
 }
 
-func isNeighborInPath(neighbor string, path []string) bool {
+func isNeighborInPath(neighbor string, path []string) bool { // komşuluk listemizi oluşturduğumuz fonksiyonumuz ( the function where we create our neighborhood list )
 	for _, node := range path {
 		if node == neighbor {
 			return true
