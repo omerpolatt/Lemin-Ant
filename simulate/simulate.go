@@ -60,9 +60,9 @@ func SimulateAntMovement(paths [][]string, antCount int, start, end string, shor
 }
 
 func PrintOutput(movements []string) {
-	fmt.Println("Hareket Detayları:")
+	fmt.Println("Movement Details:")
 	for round, movement := range movements {
-		fmt.Printf("Tur %d: %s\n", round+1, movement)
+		fmt.Printf("Tour %d: %s\n", round+1, movement)
 	}
-	fmt.Printf("Toplam %d turda tamamlandı.\n", len(movements))
+	fmt.Printf("Completed in a total of %d rounds.\n", len(movements))
 }
